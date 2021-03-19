@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { FormGroup, FormBuilder, Validators }from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators }from '@angular/forms';
 
 import { User } from '../models/user.model';
 @Component({
@@ -9,17 +9,22 @@ import { User } from '../models/user.model';
   styleUrls: ['./login.component.sass']
 })
 export class LoginComponent implements OnInit {
-	public form: FormGroup;
+	public currentUser = new User('',false)
 	public users: User[] = [];
-  constructor(private fb:FormBuilder) {
-	this.form = this.fb.group({userName:['',Validators.required]
-	})
-  }
+	userProfileForm = new FormGroup({
+		userName: new FormControl('',Validators.required),
+		owner: new FormControl(false)
+	});
 	addUser(){
-		const userName = this.form.controls['userName'].value;
-		this.users.push( new User(userName,false));
-		this.form.reset();
+		const userName = this.userProfileForm.controls['userName'].value;
+		const owner = this.userProfileForm.controls['owner'].value;
+		this.users.push( new User(userName,owner));
+		this.userProfileForm.reset();
 	}
+	onCheckChange(event: any) {
+  		this.currentUser = new User(this.currentUser.userName,event.target.value)
+
+  }
   ngOnInit(): void {
   }
 

@@ -1,9 +1,13 @@
-<form [formGroup]="form">
+<form [formGroup]="userProfileForm">
 	<input type="text" formControlName="userName">
-	<button (click)="addUser()">Submit	</button>
+	<input type="checkbox" value="owner.value" formControlName="owner" (change)="onCheckChange($event)">
+	<button (click)="addUser()" [disabled]="!userProfileForm.valid">Submit	</button>
+	<div [hidden]="userProfileForm.valid">UserName is Required </div>
 </form>
 <ul>
 	<li *ngFor="let user of users">
+
 		{{user.userName}}
+		<span *ngIf="user.owner" class="owner"> owner</span>
 	</li>
 </ul>
